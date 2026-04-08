@@ -4,21 +4,43 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+    contents: read
+    pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2. Setup Node
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: npm install
 
+      # 4. Run tests
       - name: Run tests
         run: npm test
+
+      # 5. Lint check (optional but good)
+      - name: Lint check
+        run: npx eslint . || echo "Lint issues found"
+
+      # 6. PR Comment (Automation) 
+      - name: Add PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            CI Pipeline Passed!
+            Tests executed successfully
+            Lint check completed
+            Ready for human review
