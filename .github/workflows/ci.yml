@@ -1,24 +1,42 @@
 name: Node CI Pipeline
 
 on:
-  pull_request:
-    branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+        # 1. Checkout code
+        -   name: Checkout code
+            uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+        # 2. Setup Node
+        -   name: Setup Node
+            uses: actions/setup-node@v3
+            with:
+                node-version: '18'
 
-      - name: Install dependencies
-        run: npm install
+        # 3. Install dependencies
+        -   name: Install dependencies
+            run: npm install
 
-      - name: Run tests
-        run: npm test
+        # 4. Run tests
+        -   name: Run tests
+            run: npm test
+
+        # 5. Run lint (optional but good)
+        -   name: Lint check
+            run: npx eslint . || echo "Lint issues found"
+
+        # 6. Add PR comment (THIS IS STEP 9)
+        -   name: Add PR Comment
+            uses: marocchino/sticky-pull-request-comment@v2
+            with:
+                message: |
+                    🚀 CI Pipeline Passed!
+                    ✅ Tests executed successfully
+                    🔍 Lint check completed
+                    👍 Ready for human review
