@@ -31,7 +31,7 @@ jobs:
       - name: Lint check
         run: npx eslint . || echo "Lint issues found"
 
-      # 6. PR Comment (Automation)
+      # 6. PR Comment (Automation) 
       - name: Add PR Comment
         uses: marocchino/sticky-pull-request-comment@v2
         with:
